@@ -1,0 +1,63 @@
+*ddu-kind-joplin.txt*       Joplin kind for ddu.vim
+
+Author: tomato3713 at outlook.com
+License: MIT license
+
+CONTENTS
+
+Introduction        |ddu-kind-joplin-introduction|
+Install             |ddu-kind-joplin-install|
+Examples            |ddu-kind-joplin-examples|
+Actions             |ddu-kind-joplin-actions|
+Params              |ddu-kind-joplin-params|
+
+==============================================================================
+INTRODUCTION                                    *ddu-kind-joplin-introduction*
+
+This kind implements joplin operations.
+
+
+==============================================================================
+INSTALL                                         *ddu-kind-joplin-install*
+
+Please install both "ddu.vim" and "denops.vim"
+
+https://github.com/Shougo/ddu.vim
+https://github.com/vim-denops/denops.vim
+
+==============================================================================
+EXAMPLES                                         *ddu-kind-joplin-examples*
+
+>
+call ddu#custom#patch_global(#{
+    \   sources: [
+    \       #{name: 'joplin'},
+    \   ],
+    \   sourceParams: #{
+    \     joplin: #{ 
+    \       token: 'JOPLIN_TOKEN_XXXX',
+    \       fullPath: v:true,
+    \     },
+    \   },
+    \   kindOptions: #{
+    \     joplin: #{
+    \       defaultAction: 'open',
+    \     },
+    \   },
+    \ })
+<
+
+==============================================================================
+ACTIONS                                          *ddu-kind-joplin-actions*
+
+open
+                Open the files.
+
+newNote
+                Make new note in the folder of item under a cursor.
+
+newTodo
+                Make new todo in the folder of item under a cursor.
+
+==============================================================================
+PARAMS                                           *ddu-kind-joplin-params*
