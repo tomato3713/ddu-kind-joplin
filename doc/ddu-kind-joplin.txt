@@ -60,6 +60,9 @@ newNote
 newTodo
                 Make new todo in the folder of item under a cursor.
 
+rename
+                Rename a note or todo item under a cursor.
+
 ==============================================================================
 PARAMS                                           *ddu-kind-joplin-params*
 
