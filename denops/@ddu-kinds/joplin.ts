@@ -122,6 +122,27 @@ export class Kind extends BaseKind<Params> {
 
       return ActionFlags.RefreshItems;
     },
+    rename: async (args: {
+      denops: Denops;
+      context: Context;
+      actionParams: unknown;
+      items: DduItem[];
+    }): Promise<ActionFlags | ActionResult> => {
+      const action = args.items[0].action as ActionData;
+
+      const input = await fn.input(args.denops, "Please input new item name: ");
+
+      if (input === "") {
+        return ActionFlags.Persist;
+      }
+
+      await noteApi.update({
+        id: action.id,
+        title: input,
+      });
+
+      return ActionFlags.RefreshItems;
+    },
   };
   override params(): Params {
     return {};
