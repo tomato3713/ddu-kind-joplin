@@ -13,7 +13,7 @@ import {
   op,
   vars,
 } from "https://deno.land/x/ddu_vim@v2.9.2/deps.ts";
-import { config, noteApi } from "https://esm.sh/joplin-api@0.5.1";
+import { config, folderApi, noteApi } from "https://esm.sh/joplin-api@0.5.1";
 // https://www.npmjs.com/package/joplin-api
 
 export type ActionData = {
@@ -21,6 +21,7 @@ export type ActionData = {
   id: string;
   parent_id: string;
   isFolder: boolean;
+  title: string;
 };
 
 export type Params = Record<never, never>;
@@ -89,16 +90,18 @@ export class Kind extends BaseKind<Params> {
       const action = args.items[0].action as ActionData;
 
       const cwd = action.isFolder ? action.id : action.parent_id;
-      const input = await fn.input(args.denops, "Please input note name: ");
+      const input = await fn.input(
+        args.denops,
+        "Please input new folder name: "
+      );
 
       if (input === "") {
         return ActionFlags.Persist;
       }
 
-      await noteApi.create({
+      await folderApi.create({
         parent_id: cwd,
         title: input,
-        body: `# ${input}\n`,
       });
 
       return ActionFlags.RefreshItems;
@@ -135,17 +138,84 @@ export class Kind extends BaseKind<Params> {
     }): Promise<ActionFlags | ActionResult> => {
       const action = args.items[0].action as ActionData;
 
-      const input = await fn.input(args.denops, "Please input new item name: ");
+      const input = await fn.input(
+        args.denops,
+        `Please input new item name (${action.title} ->): `
+      );
 
       if (input === "") {
         return ActionFlags.Persist;
       }
 
-      await noteApi.update({
-        id: action.id,
-        title: input,
-      });
+      try {
+        if (action.isFolder) {
+          await folderApi.update({
+            id: action.id,
+            title: input,
+          });
+        } else {
+          await noteApi.update({
+            id: action.id,
+            title: input,
+          });
+        }
+      } catch {
+        console.log(`Faild to rename item: (${action.title}->${input})`);
+      }
+      return ActionFlags.RefreshItems;
+    },
+    newFolder: async (args: {
+      denops: Denops;
+      context: Context;
+      actionParams: unknown;
+      items: DduItem[];
+    }): Promise<ActionFlags | ActionResult> => {
+      const action = args.items[0].action as ActionData;
 
+      const cwd = action.isFolder ? action.id : action.parent_id;
+      const input = await fn.input(args.denops, "Please input folder name: ");
+
+      if (input === "") {
+        return ActionFlags.Persist;
+      }
+
+      try {
+        await folderApi.create({
+          parent_id: cwd,
+          title: input,
+        });
+      } catch {
+        console.log(`Faild to new folder`);
+      }
+
+      return ActionFlags.RefreshItems;
+    },
+    delete: async (args: {
+      denops: Denops;
+      context: Context;
+      actionParams: unknown;
+      items: DduItem[];
+    }): Promise<ActionFlags | ActionResult> => {
+      const titleList = args.items.map((item) => {
+        const action = item.action as ActionData;
+        return action.title;
+      });
+      const input = await fn.input(
+        args.denops,
+        `Want to delete: ${titleList.join("\n")}? (Yes/No)`
+      );
+      if (input !== "Yes") {
+        return ActionFlags.Persist;
+      }
+
+      for (const item of args.items) {
+        const action = item.action as ActionData;
+        try {
+          action.isFolder ? await folderApi.remove(action.id) : await noteApi.remove(action.id);
+        } catch {
+          console.log("Faild to remove file: ", action.title);
+        }
+      }
       return ActionFlags.RefreshItems;
     },
   };
