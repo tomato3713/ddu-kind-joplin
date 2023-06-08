@@ -20,6 +20,7 @@ export type ActionData = {
   token: string;
   id: string;
   parent_id: string;
+  isFolder: boolean;
 };
 
 export type Params = Record<never, never>;
@@ -34,6 +35,10 @@ export class Kind extends BaseKind<Params> {
     }) => {
       for (const item of args.items) {
         const action = item?.action as ActionData;
+        if (action.isFolder) {
+          console.log("not supported open action for folder");
+          return ActionFlags.None;
+        }
         config.token = action.token;
 
         const noteRes = await noteApi.get(action.id, [
@@ -83,7 +88,7 @@ export class Kind extends BaseKind<Params> {
     }): Promise<ActionFlags | ActionResult> => {
       const action = args.items[0].action as ActionData;
 
-      const cwd = action.parent_id;
+      const cwd = action.isFolder ? action.id : action.parent_id;
       const input = await fn.input(args.denops, "Please input note name: ");
 
       if (input === "") {
@@ -106,7 +111,7 @@ export class Kind extends BaseKind<Params> {
     }): Promise<ActionFlags | ActionResult> => {
       const action = args.items[0].action as ActionData;
 
-      const cwd = action.parent_id;
+      const cwd = action.isFolder ? action.id : action.parent_id;
       const input = await fn.input(args.denops, "Please input todo name: ");
 
       if (input === "") {

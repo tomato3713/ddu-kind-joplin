@@ -56,9 +56,11 @@ open
 
 newNote
                 Make new note in the folder of item under a cursor.
+		If Folder, create new note in this folder.
 
 newTodo
-                Make new todo in the folder of item under a cursor.
+                Make new todo in the parent folder of item under a cursor.
+		If Folder, create new todo in this folder.
 
 rename
                 Rename a note or todo item under a cursor.
