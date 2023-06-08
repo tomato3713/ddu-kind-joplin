@@ -21,6 +21,7 @@ export type ActionData = {
   id: string;
   parent_id: string;
   isFolder: boolean;
+  is_todo: boolean;
   title: string;
 };
 
@@ -211,7 +212,9 @@ export class Kind extends BaseKind<Params> {
       for (const item of args.items) {
         const action = item.action as ActionData;
         try {
-          action.isFolder ? await folderApi.remove(action.id) : await noteApi.remove(action.id);
+          action.isFolder
+            ? await folderApi.remove(action.id)
+            : await noteApi.remove(action.id);
         } catch {
           console.log("Faild to remove file: ", action.title);
         }
