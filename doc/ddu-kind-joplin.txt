@@ -52,18 +52,25 @@ EXAMPLES                                         *ddu-kind-joplin-examples*
 ACTIONS                                          *ddu-kind-joplin-actions*
 
 open
-                Open the files.
+                Open the note or todo item.
 
 newNote
                 Make new note in the folder of item under a cursor.
-		If Folder, create new note in this folder.
+                If Folder, create new note in this folder.
 
 newTodo
                 Make new todo in the parent folder of item under a cursor.
-		If Folder, create new todo in this folder.
+                If Folder, create new todo in this folder.
+
+newFolder
+                Make new folder in the folder of item under a cursor.
+                If Folder, create new folder in this folder.
 
 rename
                 Rename a note or todo item under a cursor.
+
+delete
+                delete a note or todo or folder item.
 
 ==============================================================================
 PARAMS                                           *ddu-kind-joplin-params*
