@@ -100,9 +100,10 @@ export class Kind extends BaseKind<Params> {
         return ActionFlags.Persist;
       }
 
-      await folderApi.create({
+      await noteApi.create({
         parent_id: cwd,
         title: input,
+        body: `# ${input}\n`,
       });
 
       return ActionFlags.RefreshItems;
