@@ -5,14 +5,14 @@ import {
   BaseKind,
   Context,
   DduItem,
-} from "https://deno.land/x/ddu_vim@v2.9.2/types.ts";
+} from "https://deno.land/x/ddu_vim@v3.4.3/types.ts";
 import {
   autocmd,
   Denops,
   fn,
   op,
   vars,
-} from "https://deno.land/x/ddu_vim@v2.9.2/deps.ts";
+} from "https://deno.land/x/ddu_vim@v3.4.3/deps.ts";
 import { config, folderApi, noteApi } from "https://esm.sh/joplin-api@0.5.1";
 // https://www.npmjs.com/package/joplin-api
 
@@ -20,9 +20,11 @@ export type ActionData = {
   token: string;
   id: string;
   parent_id: string;
+  title: string;
   isFolder: boolean;
   is_todo: boolean;
-  title: string;
+  todo_completed: boolean;
+  todo_due: number;
 };
 
 export type Params = Record<never, never>;
@@ -48,6 +50,8 @@ export class Kind extends BaseKind<Params> {
           "title",
           "body",
           "is_todo",
+          "todo_due",
+          "todo_completed",
           "parent_id",
         ]);
 
@@ -74,9 +78,9 @@ export class Kind extends BaseKind<Params> {
             helper.define(
               "BufWriteCmd" as autocmd.AutocmdEvent,
               "<buffer>",
-              `call denops#request('joplin', 'update', [])`
+              `call denops#request('joplin', 'update', [])`,
             );
-          }
+          },
         );
       }
 
@@ -93,7 +97,7 @@ export class Kind extends BaseKind<Params> {
       const cwd = action.isFolder ? action.id : action.parent_id;
       const input = await fn.input(
         args.denops,
-        "Please input new folder name: "
+        "Please input new folder name: ",
       );
 
       if (input === "") {
@@ -142,7 +146,7 @@ export class Kind extends BaseKind<Params> {
 
       const input = await fn.input(
         args.denops,
-        `Please input new item name (${action.title} ->): `
+        `Please input new item name (${action.title} ->): `,
       );
 
       if (input === "") {
@@ -204,7 +208,7 @@ export class Kind extends BaseKind<Params> {
       });
       const input = await fn.input(
         args.denops,
-        `Want to delete: ${titleList.join("\n")}? (Yes/No)`
+        `Want to delete: ${titleList.join("\n")}? (Yes/No)`,
       );
       if (input !== "Yes") {
         return ActionFlags.Persist;
