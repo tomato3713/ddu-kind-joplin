@@ -6,13 +6,11 @@ import {
   Context,
   DduItem,
 } from "https://deno.land/x/ddu_vim@v3.5.0/types.ts";
-import {
-  autocmd,
-  Denops,
-  fn,
-  op,
-  vars,
-} from "https://deno.land/x/ddu_vim@v3.5.0/deps.ts";
+import { Denops } from "https://deno.land/x/denops_core@v5.0.0/denops.ts";
+import * as fn from "https://deno.land/x/denops_std@v5.0.1/function/mod.ts";
+import * as vars from "https://deno.land/x/denops_std@v5.0.1/variable/mod.ts";
+import * as op from "https://deno.land/x/denops_std@v5.0.1/option/mod.ts";
+import * as autocmd from "https://deno.land/x/denops_std@v5.0.1/autocmd/mod.ts";
 import { config, folderApi, noteApi } from "https://esm.sh/joplin-api@0.5.1";
 // https://www.npmjs.com/package/joplin-api
 
@@ -55,7 +53,9 @@ export class Kind extends BaseKind<Params> {
           "parent_id",
         ]);
 
-        await args.denops.cmd(`new ${noteRes.title}`);
+        await args.denops.cmd(
+          `new ${(await fn.escape(args.denops, noteRes.title, "|"))}`,
+        );
         await args.denops.call("setline", 1, noteRes.body.split(/\r?\n/));
         // clear undo history.
         const old_ul = await op.undolevels.getLocal(args.denops);
