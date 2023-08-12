@@ -24,7 +24,7 @@ export type ActionData = {
   isFolder: boolean;
   is_todo: boolean;
   todo_completed: boolean;
-  todo_due: number;
+  todo_due: boolean;
 };
 
 export type Params = Record<never, never>;
