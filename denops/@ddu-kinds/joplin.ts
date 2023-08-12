@@ -5,14 +5,14 @@ import {
   BaseKind,
   Context,
   DduItem,
-} from "https://deno.land/x/ddu_vim@v3.4.3/types.ts";
+} from "https://deno.land/x/ddu_vim@v3.5.0/types.ts";
 import {
   autocmd,
   Denops,
   fn,
   op,
   vars,
-} from "https://deno.land/x/ddu_vim@v3.4.3/deps.ts";
+} from "https://deno.land/x/ddu_vim@v3.5.0/deps.ts";
 import { config, folderApi, noteApi } from "https://esm.sh/joplin-api@0.5.1";
 // https://www.npmjs.com/package/joplin-api
 
