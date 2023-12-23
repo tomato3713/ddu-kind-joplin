@@ -53,8 +53,9 @@ export class Kind extends BaseKind<Params> {
           "parent_id",
         ]);
 
+        // Joplin allows "/" in titles
         await args.denops.cmd(
-          `new ${(await fn.escape(args.denops, noteRes.title, "|"))}`,
+          `new ${noteRes.id}`,
         );
         await args.denops.call("setline", 1, noteRes.body.split(/\r?\n/));
         // clear undo history.
