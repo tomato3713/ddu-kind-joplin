@@ -5,12 +5,12 @@ import {
   BaseKind,
   Context,
   DduItem,
-} from "https://deno.land/x/ddu_vim@v3.5.0/types.ts";
+} from "https://deno.land/x/ddu_vim@v3.8.1/types.ts";
 import { Denops } from "https://deno.land/x/denops_core@v5.0.0/denops.ts";
-import * as fn from "https://deno.land/x/denops_std@v5.0.1/function/mod.ts";
-import * as vars from "https://deno.land/x/denops_std@v5.0.1/variable/mod.ts";
-import * as op from "https://deno.land/x/denops_std@v5.0.1/option/mod.ts";
-import * as autocmd from "https://deno.land/x/denops_std@v5.0.1/autocmd/mod.ts";
+import * as fn from "https://deno.land/x/denops_std@v5.2.0/function/mod.ts";
+import * as vars from "https://deno.land/x/denops_std@v5.2.0/variable/mod.ts";
+import * as op from "https://deno.land/x/denops_std@v5.2.0/option/mod.ts";
+import * as autocmd from "https://deno.land/x/denops_std@v5.2.0/autocmd/mod.ts";
 import { config, folderApi, noteApi } from "https://esm.sh/joplin-api@0.5.1";
 // https://www.npmjs.com/package/joplin-api
 
